@@ -53,13 +53,6 @@ async function login(values: z.infer<typeof formSchema>) {
   if (!response.ok) {
     throw new Error('Failed to login');
   }
-
-  const text = await response.text();
-  if (text !== 'OK') {
-    throw new Error('Failed to login');
-  }
-  console.log(`@JT ~ login ~ text:`, text);
-  return text;
 }
 
 export function LoginForm({
