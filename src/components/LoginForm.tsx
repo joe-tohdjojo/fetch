@@ -3,6 +3,8 @@
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
+import { useMutation } from '@tanstack/react-query';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -32,11 +34,51 @@ const formSchema = z.object({
   }),
 });
 
+type FormSchema = z.infer<typeof formSchema>;
+
+async function login(values: z.infer<typeof formSchema>) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/auth/login`,
+    {
+      body: JSON.stringify(values),
+      credentials: 'include',
+      method: 'POST',
+      headers: new Headers({
+        accept: 'text/plain',
+        'Content-Type': 'application/json',
+      }),
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error('Failed to login');
+  }
+
+  const text = await response.text();
+  if (text !== 'OK') {
+    throw new Error('Failed to login');
+  }
+  console.log(`@JT ~ login ~ text:`, text);
+  return text;
+}
+
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<'div'>) {
-  const form = useForm<z.infer<typeof formSchema>>({
+  const router = useRouter();
+  const mutation = useMutation({
+    mutationFn: login,
+    onSuccess: () => {
+      router.push('/search?page=1');
+    },
+    onError: (error) => {
+      // TODO: Handle Error
+      console.error(`@JT ~ error:`, error);
+    },
+  });
+
+  const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: '',
@@ -44,10 +86,8 @@ export function LoginForm({
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  async function onSubmit(values: FormSchema) {
+    await mutation.mutate(values);
   }
 
   return (
@@ -76,6 +116,7 @@ export function LoginForm({
                     <FormLabel>Your name</FormLabel>
                     <FormControl>
                       <Input
+                        disabled={mutation.isPending}
                         placeholder="Elmo"
                         required
                         {...field}
@@ -93,9 +134,10 @@ export function LoginForm({
                     <FormLabel>Email</FormLabel>
                     <FormControl>
                       <Input
+                        disabled={mutation.isPending}
                         placeholder="email@example.com"
-                        type="email"
                         required
+                        type="email"
                         {...field}
                       />
                     </FormControl>
@@ -106,6 +148,7 @@ export function LoginForm({
               <Button
                 type="submit"
                 className="w-full"
+                disabled={mutation.isPending}
               >
                 Login
               </Button>
