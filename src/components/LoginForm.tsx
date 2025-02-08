@@ -24,6 +24,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { useToast } from '@/hooks/use-toast';
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -60,14 +61,16 @@ export function LoginForm({
   ...props
 }: React.ComponentPropsWithoutRef<'div'>) {
   const router = useRouter();
+  const { toast } = useToast();
   const mutation = useMutation({
     mutationFn: login,
     onSuccess: () => {
       router.push('/search?page=1&breed=All+breeds&sortBy=breed&sort=asc');
     },
     onError: (error) => {
-      // TODO: Handle Error
-      console.error(`@JT ~ error:`, error);
+      toast({
+        description: error.message,
+      });
     },
   });
 

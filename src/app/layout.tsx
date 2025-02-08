@@ -5,6 +5,7 @@ import { ThemeProvider } from '@/components/Providers/ThemeProvider';
 import { QueryProvider } from '@/components/Providers/QueryProvider';
 import { Navigation } from '@/components/Navigation';
 import { Analytics } from '@vercel/analytics/react';
+import { Toaster } from '@/components/ui/toaster';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -45,6 +46,7 @@ export default function RootLayout({
             >
               <Navigation />
               {children}
+              <Toaster />
             </ThemeProvider>
           </QueryProvider>
         </div>

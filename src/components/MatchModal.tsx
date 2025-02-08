@@ -16,6 +16,7 @@ import { SearchContext } from '@/context/SearchContext';
 import { fetchDogMatch, fetchDogs } from '@/lib/fetchDogStuff';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Skeleton } from './ui/skeleton';
+import { useToast } from '@/hooks/use-toast';
 
 const getDogMatch = async ({ dogIds }: { dogIds: string[] }) => {
   const { data: dogMatchData, error: dogMatchError } = await fetchDogMatch({
@@ -39,6 +40,7 @@ const getDogMatch = async ({ dogIds }: { dogIds: string[] }) => {
 export function MatchModal() {
   const [dog, setDog] = useState<Dog | null>(null);
   const { state } = useContext(SearchContext);
+  const { toast } = useToast();
   const mutation = useMutation({
     mutationFn: async () =>
       await getDogMatch({ dogIds: Object.keys(state.favorites) }),
@@ -46,7 +48,7 @@ export function MatchModal() {
       setDog(value);
     },
     onError(err) {
-      console.log(`@JT ~ onError ~ err:`, err);
+      toast({ description: err.message });
     },
   });
 
