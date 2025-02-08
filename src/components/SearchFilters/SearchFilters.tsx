@@ -17,8 +17,8 @@ export function SearchFilters() {
 
   return (
     <div className="sticky top-4 z-10 flex w-full flex-col gap-2">
-      {Object.entries(state.favorites).length > 0 && (
-        <Card className="fixed bottom-4 flex flex-col gap-2 p-2">
+      <Card className="fixed bottom-4 flex flex-col gap-2 p-2">
+        {Object.entries(state.favorites).length > 0 ? (
           <div className="flex w-full flex-col items-center gap-2">
             {favoritesCount === 0 ? (
               'Select your favorite dogs'
@@ -44,8 +44,12 @@ export function SearchFilters() {
               </Button>
             </div>
           </div>
-        </Card>
-      )}
+        ) : (
+          <p className="text-2xl font-bold">
+            Click on a dog card to add it to your favorites
+          </p>
+        )}
+      </Card>
       <Card className="flex flex-col justify-between gap-4 p-2 sm:flex-row">
         <BreedSelector className="self-start" />
         <Sorter />

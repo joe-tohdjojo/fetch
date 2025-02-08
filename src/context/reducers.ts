@@ -43,6 +43,7 @@ export const dogReducer = (state: StateType, action: ActionType): StateType => {
       }
       return { ...state, favorites: newFavorites };
     case CLEAR_FAVORITES:
+      window.localStorage.removeItem('dogFavorites');
       return { ...state, favorites: {} };
     default:
       return state;
