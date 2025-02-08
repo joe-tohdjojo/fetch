@@ -61,12 +61,7 @@ export function MatchModal() {
       }}
     >
       <DialogTrigger asChild>
-        <Button
-          variant="secondary"
-          onClick={handleClick}
-        >
-          Find your match
-        </Button>
+        <Button onClick={handleClick}>Find your match</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
