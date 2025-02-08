@@ -126,10 +126,6 @@ export const fetchDogMatch = async ({ dogIds }: { dogIds: string[] }) => {
       body: JSON.stringify(dogIds),
       credentials: 'include',
       method: 'POST',
-      headers: new Headers({
-        accept: 'application/json',
-        'Content-Type': 'application/json',
-      }),
     },
   );
 
