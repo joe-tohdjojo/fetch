@@ -8,7 +8,7 @@ This is a modern, production-ready web application built with Next.js, showcasin
 
 I implemented a URL-based approach for managing filter states and search parameters:
 
-- **Query Parameters**: All filter selections (breed, age, etc.) are reflected in the URL query parameters
+- **Query Parameters**: All filter selections (breed, age, etc.) including ascending and descending preferences are reflected in the URL query parameters
   - Enables seamless browser navigation (back/forward buttons work naturally)
   - Makes filtered views shareable via URL
   - Maintains user's filter context during page refreshes
@@ -17,7 +17,7 @@ I implemented a URL-based approach for managing filter states and search paramet
 Example:
 
 ```
-/dogs?breed=Labrador&minAge=1&maxAge=5&sort=age_asc
+/search?page=1&breed=American%20Staffordshire%20Terrier&sort=asc&sortBy=breed
 ```
 
 #### Persistent Storage
