@@ -44,6 +44,11 @@ export function AuthButton() {
       <Link href="/login">Login</Link>
     </Button>
   ) : (
-    <Button onClick={() => mutation.mutate()}>Logout</Button>
+    <Button
+      onClick={() => mutation.mutate()}
+      variant="secondary"
+    >
+      Logout
+    </Button>
   );
 }
