@@ -86,7 +86,6 @@ export const SearchContext = createContext<{
   state: initialState,
   dispatch: () => {},
 });
-export const SearchContextDispatch = createContext(() => {});
 
 export function SearchContextProvider({
   children,
@@ -150,9 +149,11 @@ export function SearchContextProvider({
     });
   }, [breedData]);
 
-  if (data?.error && data.error.status === 401) {
-    router.push('/login');
-  }
+  useEffect(() => {
+    if (data?.error && data.error.status === 401) {
+      router.push('/login');
+    }
+  }, [data?.error, router]);
 
   return (
     <SearchContext.Provider

@@ -41,7 +41,7 @@ export function SearchFilters() {
             </div>
           </div>
         ) : (
-          <p className="text-2xl font-bold">
+          <p className="text-xl font-bold">
             Click on a dog card to add it to your favorites
           </p>
         )}
