@@ -2,6 +2,20 @@
 
 This is a modern, production-ready web application built with Next.js, showcasing best practices in frontend development and a thoughtful approach to architecture and user experience.
 
+## Site Navigation Guide
+
+Upon successful login, you'll be automatically directed to the `/search` page. Here's what you can do:
+
+1. **Search and Filter**: Refine your search by breed.
+2. **Sort Results**: Arrange dogs based on different attributes like breed, name or age.
+3. **Pagination**: Browse through multiple pages of dog listings.
+4. **Favorite Dogs**: Click on a dog's card to add it to your favorites list.
+5. **Manage Favorites**: Once you've added at least one favorite, a popup will appear with options to:
+   - Clear all favorites
+   - Find a potential match from your favorites list
+
+This intuitive layout ensures a smooth and engaging experience as you explore our canine companions.
+
 ## User Experience Enhancements
 
 #### URL-Based State Management
