@@ -4,6 +4,7 @@ import './globals.css';
 import { ThemeProvider } from '@/components/Providers/ThemeProvider';
 import { QueryProvider } from '@/components/Providers/QueryProvider';
 import { Navigation } from '@/components/Navigation';
+import { Analytics } from '@vercel/analytics/react';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -33,6 +34,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <Analytics />
         <div className="grid min-h-svh grid-rows-[auto,1fr,auto] gap-0">
           <QueryProvider>
             <ThemeProvider
