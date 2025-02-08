@@ -1,6 +1,7 @@
 'use client';
 
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useState } from 'react';
 
 export const QueryProvider = ({ children }: { children: React.ReactNode }) => {
@@ -9,13 +10,19 @@ export const QueryProvider = ({ children }: { children: React.ReactNode }) => {
       new QueryClient({
         defaultOptions: {
           queries: {
-            staleTime: 60 * 1000,
+            staleTime: 2 * 60 * 1000,
           },
         },
       }),
   );
 
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      {children}
+      <ReactQueryDevtools
+        initialIsOpen
+        position="right"
+      />
+    </QueryClientProvider>
   );
 };

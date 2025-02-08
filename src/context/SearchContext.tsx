@@ -61,7 +61,7 @@ const getDogs = async ({ breed, page, sort, sortBy }: FetchDogIDsOptions) => {
 
 const dogOptions = ({ page, breed, sort, sortBy }: FetchDogIDsOptions) => {
   return queryOptions({
-    queryKey: ['dogsDefault', page, breed, sort, sortBy],
+    queryKey: ['dogs', page, breed, sort, sortBy],
     queryFn: () => getDogs({ page, breed, sort, sortBy }),
   });
 };
@@ -70,6 +70,7 @@ const dogBreedOptions = () => {
   return queryOptions({
     queryKey: ['dogBreeds'],
     queryFn: fetchDogBreeds,
+    staleTime: 10 * 60 * 1000, // 10 minutes
   });
 };
 
