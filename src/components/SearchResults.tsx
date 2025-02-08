@@ -38,7 +38,6 @@ export function SearchResults({ data }: { data: Dog[] }) {
             'border-primary': state.favorites[dog.id],
           })}
           onClick={() => {
-            console.log(`@JT ~ SearchResults ~ onClick:`);
             dispatch({
               type: TOGGLE_FAVORITE_DOG,
               payload: { dogId: dog.id },

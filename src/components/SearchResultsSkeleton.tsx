@@ -13,7 +13,7 @@ export function SearchResultsSkeleton() {
         >
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="w-full">
-              <Skeleton className="h-8 w-5/12" />
+              <Skeleton className="h-10 w-5/12" />
             </CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-2">

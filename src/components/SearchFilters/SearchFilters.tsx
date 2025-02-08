@@ -14,7 +14,7 @@ export function SearchFilters() {
   const favoritesCount = Object.entries(state.favorites).length;
 
   return (
-    <div className="dark sticky top-4 z-10 flex w-full flex-col gap-2">
+    <div className="sticky top-4 z-10 flex w-full flex-col gap-2">
       {Object.entries(state.favorites).length > 0 && (
         <Card className="fixed bottom-4 flex flex-col gap-2 p-2">
           <div className="flex w-full flex-col items-center gap-2">
