@@ -44,6 +44,10 @@ async function login(values: z.infer<typeof formSchema>) {
       body: JSON.stringify(values),
       credentials: 'include',
       method: 'POST',
+      headers: new Headers({
+        accept: 'text/plain',
+        'Content-Type': 'application/json',
+      }),
     },
   );
 
