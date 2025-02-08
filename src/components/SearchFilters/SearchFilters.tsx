@@ -25,6 +25,7 @@ export function SearchFilters() {
             ) : (
               <div>
                 You favorited{' '}
+                {favoritesCount === 100 ? 'the maximum count of ' : ' '}
                 <span className="font-bold">{favoritesCount}</span> dogs.
               </div>
             )}

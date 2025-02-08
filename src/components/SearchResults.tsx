@@ -29,10 +29,14 @@ export function SearchResults({ data }: { data: Dog[] }) {
             'border-primary': state.favorites[dog.id],
           })}
           onClick={() => {
-            dispatch({
-              type: TOGGLE_FAVORITE_DOG,
-              payload: { dogId: dog.id },
-            });
+            if (
+              Object.entries(state.favorites).length < 100 ||
+              state.favorites[dog.id]
+            )
+              dispatch({
+                type: TOGGLE_FAVORITE_DOG,
+                payload: { dogId: dog.id },
+              });
           }}
         >
           <CardHeader className="flex flex-row items-center justify-between">
