@@ -4,7 +4,12 @@ import { createContext, Dispatch, useEffect, useReducer } from 'react';
 import { useRouter } from 'next/navigation';
 import { queryOptions, useQuery } from '@tanstack/react-query';
 
-import { dogReducer, SET_BREEDS, SET_DOGS } from '@/context/reducers';
+import {
+  dogReducer,
+  LOCAL_STORAGE_KEY,
+  SET_BREEDS,
+  SET_DOGS,
+} from '@/context/reducers';
 import {
   fetchDogBreeds,
   fetchDogIds,
@@ -14,7 +19,7 @@ import {
 
 const getFavoritesFromStorage = () => {
   if (typeof window === 'undefined') return {};
-  return JSON.parse(window.localStorage.getItem('dogFavorites') || '{}');
+  return JSON.parse(window.localStorage.getItem(LOCAL_STORAGE_KEY) || '{}');
 };
 
 const initialState = {

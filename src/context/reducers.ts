@@ -5,6 +5,8 @@ export const TOGGLE_SORT_FILTER = 'TOGGLE_SORT_FILTER';
 export const TOGGLE_FAVORITE_DOG = 'TOGGLE_FAVORITE_DOG';
 export const CLEAR_FAVORITES = 'CLEAR_FAVORITES';
 
+export const LOCAL_STORAGE_KEY = 'dogFavorites';
+
 export const dogReducer = (state: StateType, action: ActionType): StateType => {
   switch (action.type) {
     case SET_DOGS:
@@ -37,13 +39,13 @@ export const dogReducer = (state: StateType, action: ActionType): StateType => {
 
       if (typeof window !== 'undefined') {
         window.localStorage.setItem(
-          'dogFavorites',
+          LOCAL_STORAGE_KEY,
           JSON.stringify(newFavorites),
         );
       }
       return { ...state, favorites: newFavorites };
     case CLEAR_FAVORITES:
-      window.localStorage.removeItem('dogFavorites');
+      window.localStorage.removeItem(LOCAL_STORAGE_KEY);
       return { ...state, favorites: {} };
     default:
       return state;
