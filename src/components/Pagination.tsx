@@ -15,7 +15,7 @@ import { SearchContext } from '@/context/SearchContext';
 export function Pagination({ href }: { href: string }) {
   const {
     state: {
-      filters: { breed },
+      filters: { breed, sort, sortBy },
       query: { currentPage, totalPages: total },
     },
   } = useContext(SearchContext);
@@ -25,12 +25,12 @@ export function Pagination({ href }: { href: string }) {
       <PaginationContent className="flex w-[300px] items-center justify-center">
         <PaginationItem className={currentPage > 1 ? 'flex' : 'invisible'}>
           <PaginationPrevious
-            href={`${href}?page=${currentPage - 1}${breed ? `&breed=${breed}` : ''}`}
+            href={`${href}?page=${currentPage - 1}${breed ? `&breed=${breed}` : ''}&sort=${sort}&sortBy=${sortBy}`}
           />
         </PaginationItem>
         <PaginationItem className={currentPage > 1 ? 'flex' : 'invisible'}>
           <PaginationLink
-            href={`${href}?page=${currentPage - 1}${breed ? `&breed=${breed}` : ''}`}
+            href={`${href}?page=${currentPage - 1}${breed ? `&breed=${breed}` : ''}&sort=${sort}&sortBy=${sortBy}`}
           >
             {currentPage - 1}
           </PaginationLink>
@@ -45,14 +45,14 @@ export function Pagination({ href }: { href: string }) {
         </PaginationItem>
         <PaginationItem className={currentPage < total ? 'flex' : 'invisible'}>
           <PaginationLink
-            href={`${href}?page=${currentPage + 1}${breed ? `&breed=${breed}` : ''}`}
+            href={`${href}?page=${currentPage + 1}${breed ? `&breed=${breed}` : ''}&sort=${sort}&sortBy=${sortBy}`}
           >
             {currentPage + 1}
           </PaginationLink>
         </PaginationItem>
         <PaginationItem className={currentPage < total ? 'flex' : 'invisible'}>
           <PaginationNext
-            href={`${href}?page=${currentPage + 1}${breed ? `&breed=${breed}` : ''}`}
+            href={`${href}?page=${currentPage + 1}${breed ? `&breed=${breed}` : ''}&sort=${sort}&sortBy=${sortBy}`}
           />
         </PaginationItem>
       </PaginationContent>

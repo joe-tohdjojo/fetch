@@ -21,7 +21,7 @@ export function Sorter({ className = '' }: { className?: string }) {
       <Select
         onValueChange={(value) =>
           router.push(
-            `/search?page=1&breed=${state.filters.breed}&sortBy=${value}&sort=${state.filters.sort}`,
+            `/search?page=1&breed=${state.filters.breed}&sortBy=${value}&sort=asc`,
           )
         }
       >
