@@ -10,15 +10,6 @@ import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { SearchContext } from '@/context/SearchContext';
 import { TOGGLE_FAVORITE_DOG } from '@/context/reducers';
 
-interface Dog {
-  id: string;
-  img: string;
-  name: string;
-  age: number;
-  zip_code: string;
-  breed: string;
-}
-
 export function SearchResults({ data }: { data: Dog[] }) {
   const { state, dispatch } = useContext(SearchContext);
 

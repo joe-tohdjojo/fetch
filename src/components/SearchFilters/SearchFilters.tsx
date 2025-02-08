@@ -3,11 +3,13 @@
 import { useContext } from 'react';
 
 import { BreedSelector } from '@/components/SearchFilters/BreedSelector';
-import { Card } from '@/components/ui/card';
-import { Pagination } from '@/components/Pagination';
 import { Button } from '@/components/ui/button';
-import { SearchContext } from '@/context/SearchContext';
+import { Card } from '@/components/ui/card';
 import { CLEAR_FAVORITES } from '@/context/reducers';
+import { MatchModal } from '@/components/MatchModal';
+import { Pagination } from '@/components/Pagination';
+import { SearchContext } from '@/context/SearchContext';
+import { Sorter } from '@/components/SearchFilters/Sorter';
 
 export function SearchFilters() {
   const { state, dispatch } = useContext(SearchContext);
@@ -27,7 +29,7 @@ export function SearchFilters() {
               </div>
             )}
             <div className="flex gap-2">
-              <Button variant="secondary">Find your match</Button>
+              <MatchModal />
               <Button
                 variant="destructive"
                 onClick={() => {
@@ -45,6 +47,7 @@ export function SearchFilters() {
       )}
       <Card className="flex flex-col justify-between gap-4 p-2 sm:flex-row">
         <BreedSelector className="self-start" />
+        <Sorter />
         <Pagination href="/search" />
       </Card>
     </div>

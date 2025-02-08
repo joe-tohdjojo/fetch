@@ -63,7 +63,7 @@ export function LoginForm({
   const mutation = useMutation({
     mutationFn: login,
     onSuccess: () => {
-      router.push('/search?page=1');
+      router.push('/search?page=1&breed=All+breeds&sortBy=breed&sort=asc');
     },
     onError: (error) => {
       // TODO: Handle Error

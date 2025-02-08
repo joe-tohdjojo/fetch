@@ -13,6 +13,8 @@ type StateType = {
   favorites: { [id: string]: boolean };
   filters: {
     breed: string | null;
+    sort: 'asc' | 'desc';
+    sortBy: 'age' | 'breed' | 'name';
   };
   query: {
     currentPage: number;

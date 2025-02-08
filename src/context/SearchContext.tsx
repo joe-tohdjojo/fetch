@@ -22,6 +22,8 @@ const initialState = {
   breeds: [],
   favorites: getFavoritesFromStorage(),
   filters: {
+    sort: 'asc' as 'asc' | 'desc',
+    sortBy: 'breed' as 'age' | 'breed' | 'name',
     breed: null,
   },
   query: {
@@ -33,10 +35,12 @@ const initialState = {
   },
 };
 
-const getDogs = async ({ page, breed }: FetchDogIDsOptions) => {
+const getDogs = async ({ breed, page, sort, sortBy }: FetchDogIDsOptions) => {
   const { data: dogIdsData, error: dogIdsError } = await fetchDogIds({
-    page,
     breed,
+    page,
+    sort,
+    sortBy,
   });
   if (dogIdsError) {
     return { data: null, error: dogIdsError };
@@ -55,10 +59,10 @@ const getDogs = async ({ page, breed }: FetchDogIDsOptions) => {
   };
 };
 
-const dogOptions = ({ page, breed }: FetchDogIDsOptions) => {
+const dogOptions = ({ page, breed, sort, sortBy }: FetchDogIDsOptions) => {
   return queryOptions({
-    queryKey: ['dogsDefault', page, breed],
-    queryFn: () => getDogs({ page, breed }),
+    queryKey: ['dogsDefault', page, breed, sort, sortBy],
+    queryFn: () => getDogs({ page, breed, sort, sortBy }),
   });
 };
 
@@ -81,19 +85,25 @@ export const SearchContextDispatch = createContext(() => {});
 export function SearchContextProvider({
   children,
   page = 1,
-  breed,
+  breed = 'All+breeds',
+  sort = 'asc',
+  sortBy = 'breed',
 }: {
   children: Readonly<React.ReactNode>;
   page?: number;
-  breed: string;
+  breed?: string;
+  sort?: 'asc' | 'desc';
+  sortBy?: 'age' | 'breed' | 'name';
 }) {
   const [state, dispatch] = useReducer(dogReducer, initialState);
   const router = useRouter();
-  if (!breed) {
-    router.replace(`/search?page=${page}&breed=All%20breeds`);
-  }
   const { data, error, isError, isLoading } = useQuery(
-    dogOptions({ page, breed: breed !== 'All breeds' ? breed : null }),
+    dogOptions({
+      page,
+      breed: decodeURIComponent(breed) !== 'All breeds' ? breed : null,
+      sort,
+      sortBy,
+    }),
   );
   const { data: breedData } = useQuery(dogBreedOptions());
 
@@ -102,7 +112,7 @@ export function SearchContextProvider({
       type: SET_DOGS,
       payload: {
         dogs: data?.data?.dogs,
-        filters: { breed },
+        filters: { breed, sort, sortBy },
         query: {
           currentPage: page,
           isLoading,
@@ -120,6 +130,8 @@ export function SearchContextProvider({
     isError,
     isLoading,
     page,
+    sort,
+    sortBy,
   ]);
 
   useEffect(() => {

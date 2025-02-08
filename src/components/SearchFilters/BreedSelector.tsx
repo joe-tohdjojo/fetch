@@ -1,6 +1,7 @@
 'use client';
 
 import { useContext } from 'react';
+import { useRouter } from 'next/navigation';
 
 import {
   Select,
@@ -10,7 +11,6 @@ import {
   SelectGroup,
 } from '@/components/ui/select';
 import { SearchContext } from '@/context/SearchContext';
-import { useRouter } from 'next/navigation';
 
 export function BreedSelector({ className = '' }: { className?: string }) {
   const { state } = useContext(SearchContext);
@@ -18,7 +18,11 @@ export function BreedSelector({ className = '' }: { className?: string }) {
 
   return state.breeds?.length === 0 ? null : (
     <Select
-      onValueChange={(value) => router.push(`/search?page=1&breed=${value}`)}
+      onValueChange={(value) =>
+        router.push(
+          `/search?page=1&breed=${value}&sort=${state.filters.sort}&sortBy=${state.filters.sortBy}`,
+        )
+      }
       value={state.filters.breed || 'All breeds'}
     >
       <SelectTrigger className={className}>{state.filters.breed}</SelectTrigger>

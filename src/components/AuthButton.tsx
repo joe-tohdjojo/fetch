@@ -40,7 +40,7 @@ export function AuthButton() {
   }
 
   return unAuthorizedPaths.includes(pathname) ? (
-    <Button className="rounded-md bg-primary p-2 text-white">
+    <Button>
       <Link href="/login">Login</Link>
     </Button>
   ) : (

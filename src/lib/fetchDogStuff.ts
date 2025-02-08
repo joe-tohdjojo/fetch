@@ -1,37 +1,48 @@
 export type FetchDogIDsOptions = {
-  page: number;
   breed: string | null;
+  page: number;
+  sort: 'asc' | 'desc';
+  sortBy: 'age' | 'breed' | 'name';
 };
 
 export const fetchDogIds = (() => {
   let total = 10000;
-  return async ({ page, breed }: FetchDogIDsOptions) => {
+  return async ({
+    page,
+    breed,
+    sort = 'asc',
+    sortBy = 'breed',
+  }: FetchDogIDsOptions) => {
     const defaultSize = 24;
     const from = (page - 1) * defaultSize;
     const size = Math.min(defaultSize, total - from);
+    const s = `${sortBy}:${sort}`;
 
     const queryParams = {
+      sort: s,
       size,
       from,
       breeds: breed,
     } as const;
-
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/dogs/search?${Object.entries(
-        queryParams,
-      ).reduce((acc, [key, value]) => {
+    const searchStr = Object.entries(queryParams).reduce(
+      (acc, [key, value]) => {
         if (!value) return acc;
         const str = `${key}=${value}`;
         if (acc.length === 0) {
           return str;
         }
         return `${acc}&${str}`;
-      }, '')}`,
-      {
-        credentials: 'include',
-        method: 'GET',
       },
+      '',
     );
+    const url = encodeURI(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/dogs/search?${searchStr}`,
+    );
+
+    const response = await fetch(url, {
+      credentials: 'include',
+      method: 'GET',
+    });
 
     if (!response.ok) {
       return {
@@ -90,6 +101,35 @@ export const fetchDogBreeds = async () => {
     {
       credentials: 'include',
       method: 'GET',
+    },
+  );
+
+  if (!response.ok) {
+    return {
+      data: null,
+      error: {
+        status: response.status,
+        message: response.statusText,
+      },
+    };
+  }
+
+  const data = await response.json();
+
+  return { data, error: null };
+};
+
+export const fetchDogMatch = async ({ dogIds }: { dogIds: string[] }) => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/dogs/match`,
+    {
+      body: JSON.stringify(dogIds),
+      credentials: 'include',
+      method: 'POST',
+      headers: new Headers({
+        accept: 'application/json',
+        'Content-Type': 'application/json',
+      }),
     },
   );
 
