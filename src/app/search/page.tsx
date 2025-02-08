@@ -12,7 +12,7 @@ const searchParamsSchema = z.object({
 export default async function SearchPage({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const validatedParams = searchParamsSchema.parse(await searchParams);
 
