@@ -42,9 +42,6 @@ export const fetchDogIds = (() => {
     const response = await fetch(url, {
       credentials: 'include',
       method: 'GET',
-      headers: new Headers({
-        'Access-Control-Allow-Origin': '*',
-      }),
     });
 
     if (!response.ok) {
@@ -80,7 +77,6 @@ export const fetchDogs = async (dogIds: string[]) => {
     headers: new Headers({
       accept: 'application/json',
       'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
     }),
   });
 
@@ -105,9 +101,6 @@ export const fetchDogBreeds = async () => {
     {
       credentials: 'include',
       method: 'GET',
-      headers: new Headers({
-        'Access-Control-Allow-Origin': '*',
-      }),
     },
   );
 
@@ -136,7 +129,6 @@ export const fetchDogMatch = async ({ dogIds }: { dogIds: string[] }) => {
       headers: new Headers({
         accept: 'application/json',
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
       }),
     },
   );
