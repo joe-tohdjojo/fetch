@@ -11,12 +11,11 @@ import {
   SelectTrigger,
 } from '@/components/ui/select';
 import { SearchContext } from '@/context/SearchContext';
-import { TOGGLE_SORT_FILTER } from '@/context/reducers';
 import { useRouter } from 'next/navigation';
 
 export function Sorter({ className = '' }: { className?: string }) {
   const router = useRouter();
-  const { state, dispatch } = useContext(SearchContext);
+  const { state } = useContext(SearchContext);
   return (
     <div className="flex flex-col gap-2 sm:flex-row">
       <Select
