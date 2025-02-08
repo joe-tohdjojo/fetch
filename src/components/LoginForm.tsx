@@ -47,8 +47,7 @@ async function login(values: z.infer<typeof formSchema>) {
       headers: new Headers({
         accept: 'text/plain',
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin':
-          'https://frontend-take-home-service.fetch.com',
+        'Access-Control-Allow-Origin': '*',
       }),
     },
   );
