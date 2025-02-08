@@ -1,12 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useContext } from 'react';
 import Image from 'next/image';
 import { Star } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { SearchContext } from '@/context/SearchContext';
+import { TOGGLE_FAVORITE_DOG } from '@/context/reducers';
 
 interface Dog {
   id: string;
@@ -18,7 +20,7 @@ interface Dog {
 }
 
 export function SearchResults({ data }: { data: Dog[] }) {
-  const [favorites, setFavorites] = useState<{ [key: string]: boolean }>({});
+  const { state, dispatch } = useContext(SearchContext);
 
   return data?.map(
     (dog: {
@@ -33,25 +35,21 @@ export function SearchResults({ data }: { data: Dog[] }) {
         <Card
           key={dog.id}
           className={cn('w-[300px] hover:cursor-pointer', {
-            'border-primary': favorites[dog.id],
+            'border-primary': state.favorites[dog.id],
           })}
-          onClick={() =>
-            setFavorites((prev) => {
-              if (prev[dog.id]) {
-                const newState = { ...prev };
-                delete newState[dog.id];
-                return newState;
-              } else {
-                return { ...prev, [dog.id]: true };
-              }
-            })
-          }
+          onClick={() => {
+            console.log(`@JT ~ SearchResults ~ onClick:`);
+            dispatch({
+              type: TOGGLE_FAVORITE_DOG,
+              payload: { dogId: dog.id },
+            });
+          }}
         >
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-xl">{dog.name}</CardTitle>
             <Star
               className={cn('h-6 w-6', {
-                'fill-white': favorites[dog.id],
+                'fill-primary': state.favorites[dog.id],
               })}
             />
           </CardHeader>
@@ -61,10 +59,11 @@ export function SearchResults({ data }: { data: Dog[] }) {
               className="bg-muted"
             >
               <Image
-                className="h-full w-full object-cover"
+                className="h-full w-full rounded object-cover"
                 src={dog.img}
                 alt={dog.name}
                 fill
+                sizes="200px"
               />
             </AspectRatio>
             <p>

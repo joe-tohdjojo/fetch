@@ -33,7 +33,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="grid min-h-svh grid-rows-[auto,1fr,auto]">
+        <div className="grid min-h-svh grid-rows-[auto,1fr,auto] gap-0">
           <QueryProvider>
             <ThemeProvider
               attribute="class"

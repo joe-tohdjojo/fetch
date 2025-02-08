@@ -1,0 +1,157 @@
+'use client';
+
+import { createContext, Dispatch, useEffect, useReducer } from 'react';
+import { useRouter } from 'next/navigation';
+import { queryOptions, useQuery } from '@tanstack/react-query';
+
+import { dogReducer, SET_BREEDS, SET_DOGS } from '@/context/reducers';
+import {
+  fetchDogBreeds,
+  fetchDogIds,
+  FetchDogIDsOptions,
+  fetchDogs,
+} from '@/lib/fetchDogStuff';
+
+const getFavoritesFromStorage = () => {
+  if (typeof window === 'undefined') return {};
+  return JSON.parse(window.localStorage.getItem('dogFavorites') || '{}');
+};
+
+const initialState = {
+  dogs: [],
+  breeds: [],
+  favorites: getFavoritesFromStorage(),
+  filters: {
+    breed: null,
+  },
+  query: {
+    currentPage: 1,
+    isLoading: false,
+    isError: false,
+    totalPages: 500,
+    error: { message: '' },
+  },
+};
+
+const getDogs = async ({ page, breed }: FetchDogIDsOptions) => {
+  const { data: dogIdsData, error: dogIdsError } = await fetchDogIds({
+    page,
+    breed,
+  });
+  if (dogIdsError) {
+    return { data: null, error: dogIdsError };
+  }
+
+  const { data: dogsData, error: dogsError } = await fetchDogs(
+    dogIdsData.resultIds,
+  );
+
+  if (dogsError) {
+    return { data: null, error: dogsError };
+  }
+  return {
+    data: { dogs: dogsData, totalPages: dogIdsData.totalPages },
+    error: null,
+  };
+};
+
+const dogOptions = ({ page, breed }: FetchDogIDsOptions) => {
+  return queryOptions({
+    queryKey: ['dogsDefault', page, breed],
+    queryFn: () => getDogs({ page, breed }),
+  });
+};
+
+const dogBreedOptions = () => {
+  return queryOptions({
+    queryKey: ['dogBreeds'],
+    queryFn: fetchDogBreeds,
+  });
+};
+
+export const SearchContext = createContext<{
+  state: StateType;
+  dispatch: Dispatch<ActionType>;
+}>({
+  state: initialState,
+  dispatch: () => {},
+});
+export const SearchContextDispatch = createContext(() => {});
+
+export function SearchContextProvider({
+  children,
+  page = 1,
+  breed,
+}: {
+  children: Readonly<React.ReactNode>;
+  page?: number;
+  breed: string;
+}) {
+  const [state, dispatch] = useReducer(dogReducer, initialState);
+  const router = useRouter();
+  if (!breed) {
+    router.replace(`/search?page=${page}&breed=All%20breeds`);
+  }
+  const { data, error, isError, isLoading } = useQuery(
+    dogOptions({ page, breed: breed !== 'All breeds' ? breed : null }),
+  );
+  const { data: breedData } = useQuery(dogBreedOptions());
+
+  useEffect(() => {
+    dispatch({
+      type: SET_DOGS,
+      payload: {
+        dogs: data?.data?.dogs,
+        filters: { breed },
+        query: {
+          currentPage: page,
+          isLoading,
+          isError,
+          totalPages: data?.data?.totalPages,
+          error,
+        },
+      },
+    });
+  }, [
+    breed,
+    data?.data?.dogs,
+    data?.data?.totalPages,
+    error,
+    isError,
+    isLoading,
+    page,
+  ]);
+
+  useEffect(() => {
+    if (!breedData) return;
+    dispatch({
+      type: SET_BREEDS,
+      payload: {
+        breeds: breedData.data,
+      },
+    });
+  }, [breedData]);
+
+  if (data?.error && data.error.status === 401) {
+    router.push('/login');
+  }
+
+  return (
+    <SearchContext.Provider
+      value={{
+        state: {
+          ...state,
+          filters: {
+            ...state.filters,
+            breed,
+          },
+          query: { ...state.query, currentPage: page, isLoading, isError },
+          favorites: { ...state.favorites },
+        },
+        dispatch,
+      }}
+    >
+      {children}
+    </SearchContext.Provider>
+  );
+}

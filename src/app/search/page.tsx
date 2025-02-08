@@ -1,16 +1,23 @@
 import { Search } from '@/components/Search';
+import { SearchContextProvider } from '@/context/SearchContext';
 
 export default async function SearchPage({
   searchParams,
 }: {
   searchParams: Promise<{
     page: number;
+    breed: string;
   }>;
 }) {
-  const { page } = await searchParams;
+  const { page, breed } = await searchParams;
   return (
-    <main className="flex h-full flex-col items-center justify-center gap-8 px-4">
-      <Search page={page && Number(page)} />
+    <main className="mb-36 mt-8 flex h-full flex-col items-center gap-8 px-4">
+      <SearchContextProvider
+        page={page && Number(page)}
+        breed={breed}
+      >
+        <Search />
+      </SearchContextProvider>
     </main>
   );
 }

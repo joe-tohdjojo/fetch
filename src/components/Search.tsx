@@ -1,67 +1,27 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
-import { queryOptions } from '@tanstack/react-query';
+import { useContext } from 'react';
 
 import { SearchResults } from '@/components/SearchResults';
-import { fetchDogIds, fetchDogs } from '@/lib/fetchDogStuff';
-import { Pagination } from '@/components/Pagination';
 import { SearchResultsSkeleton } from '@/components/SearchResultsSkeleton';
-import { SearchFilters } from '@/components/SearchFilters';
+import { SearchFilters } from '@/components/SearchFilters/SearchFilters';
+import { SearchContext } from '@/context/SearchContext';
 
-const getDogs = async (page: number) => {
-  const { data: dogIdsData, error: dogIdsError } = await fetchDogIds(page);
-  if (dogIdsError) {
-    return { data: null, error: dogIdsError };
-  }
-
-  const { data: dogsData, error: dogsError } = await fetchDogs(
-    dogIdsData.resultIds,
-  );
-
-  if (dogsError) {
-    console.log(`@JT ~ getDogs ~ dogsError:`, dogsError);
-    return { data: null, error: dogsError };
-  }
-  return {
-    data: { dogs: dogsData, totalPages: dogIdsData.totalPages },
-    error: null,
-  };
-};
-
-const dogOptions = (page: number) => {
-  return queryOptions({
-    queryKey: ['dogsDefault', page],
-    queryFn: () => getDogs(page),
-  });
-};
-
-export function Search({ page = 1 }: { page?: number }) {
-  const router = useRouter();
-  const { data, error, isError, isLoading } = useQuery(dogOptions(page));
-
-  if (data?.error && data.error.status === 401) {
-    router.push('/login');
-  }
+export function Search() {
+  const { state } = useContext(SearchContext);
 
   return (
-    <div className="relative my-10 flex flex-col gap-4">
+    <div className="relative mb-10 flex flex-col items-center gap-4">
       <SearchFilters />
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {isLoading ? (
+        {state.query.isLoading ? (
           <SearchResultsSkeleton />
-        ) : isError ? (
-          <div>Error: {error?.message}</div>
+        ) : state.query.isError ? (
+          <div>Error: {state.query.error?.message}</div>
         ) : (
-          <SearchResults data={data?.data?.dogs} />
+          <SearchResults data={state.dogs} />
         )}
       </div>
-      <Pagination
-        total={data?.data?.totalPages}
-        currentPage={page}
-        href="/search"
-      />
     </div>
   );
 }

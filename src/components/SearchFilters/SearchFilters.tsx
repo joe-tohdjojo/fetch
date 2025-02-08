@@ -1,0 +1,52 @@
+'use client';
+
+import { useContext } from 'react';
+
+import { BreedSelector } from '@/components/SearchFilters/BreedSelector';
+import { Card } from '@/components/ui/card';
+import { Pagination } from '@/components/Pagination';
+import { Button } from '@/components/ui/button';
+import { SearchContext } from '@/context/SearchContext';
+import { CLEAR_FAVORITES } from '@/context/reducers';
+
+export function SearchFilters() {
+  const { state, dispatch } = useContext(SearchContext);
+  const favoritesCount = Object.entries(state.favorites).length;
+
+  return (
+    <div className="dark sticky top-4 z-10 flex w-full flex-col gap-2">
+      {Object.entries(state.favorites).length > 0 && (
+        <Card className="fixed bottom-4 flex flex-col gap-2 p-2">
+          <div className="flex w-full flex-col items-center gap-2">
+            {favoritesCount === 0 ? (
+              'Select your favorite dogs'
+            ) : (
+              <div>
+                You favorited{' '}
+                <span className="font-bold">{favoritesCount}</span> dogs.
+              </div>
+            )}
+            <div className="flex gap-2">
+              <Button variant="secondary">Find your match</Button>
+              <Button
+                variant="destructive"
+                onClick={() => {
+                  dispatch({
+                    type: CLEAR_FAVORITES,
+                    payload: {},
+                  });
+                }}
+              >
+                Clear your favorites
+              </Button>
+            </div>
+          </div>
+        </Card>
+      )}
+      <Card className="flex flex-col justify-between gap-4 p-2 sm:flex-row">
+        <BreedSelector className="self-start" />
+        <Pagination href="/search" />
+      </Card>
+    </div>
+  );
+}

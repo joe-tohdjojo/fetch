@@ -1,3 +1,7 @@
+'use client';
+
+import { useContext } from 'react';
+
 import {
   Pagination as P,
   PaginationContent,
@@ -6,24 +10,28 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
+import { SearchContext } from '@/context/SearchContext';
 
-export function Pagination({
-  href,
-  currentPage,
-  total,
-}: {
-  href: string;
-  currentPage: number;
-  total: number;
-}) {
+export function Pagination({ href }: { href: string }) {
+  const {
+    state: {
+      filters: { breed },
+      query: { currentPage, totalPages: total },
+    },
+  } = useContext(SearchContext);
+
   return (
-    <P>
+    <P className="mx-0 justify-end">
       <PaginationContent className="flex w-[300px] items-center justify-center">
         <PaginationItem className={currentPage > 1 ? 'flex' : 'invisible'}>
-          <PaginationPrevious href={`${href}?page=${currentPage - 1}`} />
+          <PaginationPrevious
+            href={`${href}?page=${currentPage - 1}${breed ? `&breed=${breed}` : ''}`}
+          />
         </PaginationItem>
         <PaginationItem className={currentPage > 1 ? 'flex' : 'invisible'}>
-          <PaginationLink href={`${href}?page=${currentPage - 1}`}>
+          <PaginationLink
+            href={`${href}?page=${currentPage - 1}${breed ? `&breed=${breed}` : ''}`}
+          >
             {currentPage - 1}
           </PaginationLink>
         </PaginationItem>
@@ -36,12 +44,16 @@ export function Pagination({
           </PaginationLink>
         </PaginationItem>
         <PaginationItem className={currentPage < total ? 'flex' : 'invisible'}>
-          <PaginationLink href={`${href}?page=${currentPage + 1}`}>
+          <PaginationLink
+            href={`${href}?page=${currentPage + 1}${breed ? `&breed=${breed}` : ''}`}
+          >
             {currentPage + 1}
           </PaginationLink>
         </PaginationItem>
         <PaginationItem className={currentPage < total ? 'flex' : 'invisible'}>
-          <PaginationNext href={`${href}?page=${currentPage + 1}`} />
+          <PaginationNext
+            href={`${href}?page=${currentPage + 1}${breed ? `&breed=${breed}` : ''}`}
+          />
         </PaginationItem>
       </PaginationContent>
     </P>
