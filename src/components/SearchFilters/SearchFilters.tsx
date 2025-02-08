@@ -18,17 +18,13 @@ export function SearchFilters() {
   return (
     <div className="sticky top-4 z-10 flex w-full flex-col gap-2">
       <Card className="fixed bottom-4 flex flex-col gap-2 p-2">
-        {Object.entries(state.favorites).length > 0 ? (
+        {favoritesCount > 0 ? (
           <div className="flex w-full flex-col items-center gap-2">
-            {favoritesCount === 0 ? (
-              'Select your favorite dogs'
-            ) : (
-              <div>
-                You favorited{' '}
-                {favoritesCount === 100 ? 'the maximum count of ' : ' '}
-                <span className="font-bold">{favoritesCount}</span> dogs.
-              </div>
-            )}
+            <div>
+              You favorited{' '}
+              {favoritesCount === 100 ? 'the maximum count of ' : ' '}
+              <span className="font-bold">{favoritesCount}</span> dogs.
+            </div>
             <div className="flex gap-2">
               <MatchModal />
               <Button
