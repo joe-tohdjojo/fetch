@@ -78,7 +78,7 @@ export function MatchModal() {
             <AspectRatio ratio={1 / 1}>
               {dog ? (
                 <Image
-                  className="rounded object-cover"
+                  className="rounded-lg object-cover"
                   src={dog.img}
                   alt={dog.name}
                   fill
