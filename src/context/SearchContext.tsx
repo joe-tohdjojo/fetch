@@ -4,18 +4,14 @@ import { createContext, Dispatch, useEffect, useReducer } from 'react';
 import { useRouter } from 'next/navigation';
 import { queryOptions, useQuery } from '@tanstack/react-query';
 
-import {
-  dogReducer,
-  LOCAL_STORAGE_KEY,
-  SET_BREEDS,
-  SET_DOGS,
-} from '@/context/reducers';
+import { dogReducer, LOCAL_STORAGE_KEY, SET_DOGS } from '@/context/reducers';
 import {
   fetchDogBreeds,
   fetchDogIds,
   FetchDogIDsOptions,
   fetchDogs,
 } from '@/lib/fetchDogStuff';
+import { useToast } from '@/hooks/use-toast';
 
 const getFavoritesFromStorage = () => {
   if (typeof window === 'undefined') return {};
@@ -48,7 +44,11 @@ const getDogs = async ({ breed, page, sort, sortBy }: FetchDogIDsOptions) => {
     sortBy,
   });
   if (dogIdsError) {
-    return { data: null, error: dogIdsError };
+    throw new Error(
+      dogIdsError.status === 401
+        ? '401 Unauthorized'
+        : dogIdsError.status.toString(),
+    );
   }
 
   const { data: dogsData, error: dogsError } = await fetchDogs(
@@ -56,26 +56,32 @@ const getDogs = async ({ breed, page, sort, sortBy }: FetchDogIDsOptions) => {
   );
 
   if (dogsError) {
-    return { data: null, error: dogsError };
+    throw new Error(
+      dogsError.status === 401
+        ? '401 Unauthorized'
+        : dogsError.status.toString(),
+    );
   }
-  return {
-    data: { dogs: dogsData, totalPages: dogIdsData.totalPages },
-    error: null,
-  };
+
+  return { dogs: dogsData, totalPages: dogIdsData.totalPages };
+};
+
+const getBreeds = async () => {
+  const { data, error } = await fetchDogBreeds();
+
+  if (error) {
+    throw new Error(
+      error.status === 401 ? '401 Unauthorized' : error.status.toString(),
+    );
+  }
+
+  return data;
 };
 
 const dogOptions = ({ page, breed, sort, sortBy }: FetchDogIDsOptions) => {
   return queryOptions({
     queryKey: ['dogs', page, breed, sort, sortBy],
     queryFn: () => getDogs({ page, breed, sort, sortBy }),
-  });
-};
-
-const dogBreedOptions = () => {
-  return queryOptions({
-    queryKey: ['dogBreeds'],
-    queryFn: fetchDogBreeds,
-    staleTime: 10 * 60 * 1000, // 10 minutes. I'd have a conversation with product to decide on an acceptable stale time
   });
 };
 
@@ -100,6 +106,7 @@ export function SearchContextProvider({
   sort?: 'asc' | 'desc';
   sortBy?: 'age' | 'breed' | 'name';
 }) {
+  const { toast } = useToast();
   const [state, dispatch] = useReducer(dogReducer, initialState);
   const router = useRouter();
   const { data, error, isError, isLoading } = useQuery(
@@ -110,30 +117,42 @@ export function SearchContextProvider({
       sortBy,
     }),
   );
-  const { data: breedData, error: dogBreedError } = useQuery(dogBreedOptions());
-  console.log(`@JT ~ dogBreedError:`, dogBreedError);
+  const {
+    data: breedsData,
+    error: breedsError,
+    isLoading: isBreedsLoading,
+    isError: isBreedsError,
+  } = useQuery({
+    queryKey: ['dogBreeds'],
+    queryFn: getBreeds,
+  });
 
   useEffect(() => {
+    if (!data || !breedsData) return;
     dispatch({
       type: SET_DOGS,
       payload: {
-        dogs: data?.data?.dogs,
+        breeds: breedsData || [],
+        dogs: data.dogs,
         filters: { breed, sort, sortBy },
         query: {
           currentPage: page,
-          isLoading,
-          isError,
-          totalPages: data?.data?.totalPages,
-          error,
+          isLoading: isLoading || isBreedsLoading,
+          isError: isError || isBreedsError,
+          totalPages: data?.totalPages,
+          error: error || breedsError,
         },
       },
     });
   }, [
     breed,
-    data?.data?.dogs,
-    data?.data?.totalPages,
+    breedsData,
+    breedsError,
+    data,
     error,
     isError,
+    isBreedsError,
+    isBreedsLoading,
     isLoading,
     page,
     sort,
@@ -141,20 +160,15 @@ export function SearchContextProvider({
   ]);
 
   useEffect(() => {
-    if (!breedData) return;
-    dispatch({
-      type: SET_BREEDS,
-      payload: {
-        breeds: breedData.data,
-      },
-    });
-  }, [breedData]);
-
-  useEffect(() => {
-    if (data?.error && data.error.status === 401) {
-      router.push('/login');
+    if (isError || isBreedsError) {
+      toast({
+        title: 'Something went wrong!',
+        description: `The server errored with ${error || breedsError}`,
+        variant: 'destructive',
+      });
+      router.replace('/login');
     }
-  }, [data?.error, router]);
+  }, [isError, isBreedsError, breedsError, error, toast, router]);
 
   return (
     <SearchContext.Provider
