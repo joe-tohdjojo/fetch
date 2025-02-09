@@ -75,7 +75,7 @@ const dogBreedOptions = () => {
   return queryOptions({
     queryKey: ['dogBreeds'],
     queryFn: fetchDogBreeds,
-    staleTime: 10 * 60 * 1000, // 10 minutes
+    staleTime: 10 * 60 * 1000, // 10 minutes. I'd have a conversation with product to decide on an acceptable stale time
   });
 };
 
@@ -110,7 +110,8 @@ export function SearchContextProvider({
       sortBy,
     }),
   );
-  const { data: breedData } = useQuery(dogBreedOptions());
+  const { data: breedData, error: dogBreedError } = useQuery(dogBreedOptions());
+  console.log(`@JT ~ dogBreedError:`, dogBreedError);
 
   useEffect(() => {
     dispatch({

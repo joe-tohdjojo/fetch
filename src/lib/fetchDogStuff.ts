@@ -42,6 +42,9 @@ export const fetchDogIds = (() => {
     const response = await fetch(url, {
       credentials: 'include',
       method: 'GET',
+      headers: new Headers({
+        'Content-Type': 'application/json',
+      }),
     });
 
     if (!response.ok) {
@@ -75,7 +78,6 @@ export const fetchDogs = async (dogIds: string[]) => {
     credentials: 'include',
     method: 'POST',
     headers: new Headers({
-      accept: 'application/json',
       'Content-Type': 'application/json',
     }),
   });
@@ -101,6 +103,9 @@ export const fetchDogBreeds = async () => {
     {
       credentials: 'include',
       method: 'GET',
+      headers: new Headers({
+        'Content-Type': 'application/json',
+      }),
     },
   );
 
@@ -127,7 +132,6 @@ export const fetchDogMatch = async ({ dogIds }: { dogIds: string[] }) => {
       credentials: 'include',
       method: 'POST',
       headers: new Headers({
-        accept: 'application/json',
         'Content-Type': 'application/json',
       }),
     },

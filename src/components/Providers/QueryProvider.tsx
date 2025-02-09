@@ -19,10 +19,7 @@ export const QueryProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-      <ReactQueryDevtools
-        initialIsOpen
-        position="right"
-      />
+      <ReactQueryDevtools position="right" />
     </QueryClientProvider>
   );
 };
