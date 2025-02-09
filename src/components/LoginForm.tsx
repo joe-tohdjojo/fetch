@@ -50,6 +50,7 @@ async function login(values: z.infer<typeof formSchema>) {
       credentials: 'include',
       method: 'POST',
       headers: new Headers({
+        accept: '*',
         'Content-Type': 'application/json',
       }),
     },

@@ -18,7 +18,7 @@ async function logout() {
       credentials: 'include',
       method: 'POST',
       headers: new Headers({
-        accept: 'text/plain',
+        accept: '*',
         'Content-Type': 'application/json',
       }),
     },
