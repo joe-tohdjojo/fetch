@@ -201,7 +201,7 @@ export function SearchContextProvider({
     if (isError || isBreedsError) {
       toast({
         title: 'Something went wrong!',
-        description: `The server errored with ${error || breedsError}`,
+        description: `The server responded with ${error || breedsError}`,
         variant: 'destructive',
       });
       router.replace('/login');
