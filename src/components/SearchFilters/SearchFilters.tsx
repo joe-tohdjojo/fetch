@@ -11,6 +11,10 @@ import { Pagination } from '@/components/Pagination';
 import { SearchContext } from '@/context/SearchContext';
 import { Sorter } from '@/components/SearchFilters/Sorter';
 
+/**
+ * Component for rendering search filters
+ * @returns {JSX.Element} Search filters component
+ */
 export function SearchFilters() {
   const { state, dispatch } = useContext(SearchContext);
   const favoritesCount = Object.entries(state.favorites).length;

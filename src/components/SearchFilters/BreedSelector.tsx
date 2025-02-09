@@ -12,6 +12,12 @@ import {
 } from '@/components/ui/select';
 import { SearchContext } from '@/context/SearchContext';
 
+/**
+ * Component for selecting dog breeds with a dropdown
+ * @param {Object} props - Component props
+ * @param {string} [props.className=''] - Additional CSS classes
+ * @returns {JSX.Element} Breed selector component
+ */
 export function BreedSelector({ className = '' }: { className?: string }) {
   const { state } = useContext(SearchContext);
   const router = useRouter();

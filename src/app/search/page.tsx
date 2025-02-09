@@ -9,6 +9,12 @@ const searchParamsSchema = z.object({
   sortBy: z.enum(['age', 'breed', 'name']).optional().default('name'),
 });
 
+/**
+ * Search page component that displays the dog search interface
+ * @param {Object} props - Component props
+ * @param {Promise<{ [key: string]: string | string[] | undefined }>} props.searchParams - URL search parameters
+ * @returns {JSX.Element} Search page component
+ */
 export default async function SearchPage({
   searchParams,
 }: {

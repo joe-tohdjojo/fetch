@@ -10,6 +10,12 @@ import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { SearchContext } from '@/context/SearchContext';
 import { TOGGLE_FAVORITE_DOG } from '@/context/reducers';
 
+/**
+ * Renders a list of dog cards with their information and favorite status
+ * @param {Object} props - Component props
+ * @param {Dog[]} props.data - Array of dog objects to display
+ * @returns {JSX.Element[]} Array of dog card components
+ */
 export function SearchResults({ data }: { data: Dog[] }) {
   const { state, dispatch } = useContext(SearchContext);
 

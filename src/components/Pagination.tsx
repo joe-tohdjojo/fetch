@@ -12,6 +12,12 @@ import {
 } from '@/components/ui/pagination';
 import { SearchContext } from '@/context/SearchContext';
 
+/**
+ * Component for rendering pagination
+ * @param {Object} props - Component props
+ * @param {string} props.href - URL to link to
+ * @returns {JSX.Element} Pagination component
+ */
 export function Pagination({ href }: { href: string }) {
   const {
     state: {

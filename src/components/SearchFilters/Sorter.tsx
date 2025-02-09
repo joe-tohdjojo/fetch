@@ -13,6 +13,12 @@ import {
 import { SearchContext } from '@/context/SearchContext';
 import { useRouter } from 'next/navigation';
 
+/**
+ * Component for sorting dog results by different criteria
+ * @param {Object} props - Component props
+ * @param {string} [props.className=''] - Additional CSS classes
+ * @returns {JSX.Element} Sorter component
+ */
 export function Sorter({ className = '' }: { className?: string }) {
   const router = useRouter();
   const { state } = useContext(SearchContext);

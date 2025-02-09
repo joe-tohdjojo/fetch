@@ -13,6 +13,10 @@ import {
 } from '@/lib/fetchDogStuff';
 import { useToast } from '@/hooks/use-toast';
 
+/**
+ * Retrieves favorites from local storage
+ * @returns {Object} Object containing favorite dogs, empty object if no favorites or not in browser context
+ */
 const getFavoritesFromStorage = () => {
   if (typeof window === 'undefined') return {};
   return JSON.parse(window.localStorage.getItem(LOCAL_STORAGE_KEY) || '{}');
@@ -36,6 +40,16 @@ const initialState = {
   },
 };
 
+/**
+ * Fetches dogs based on provided filters
+ * @param {Object} options - The options for fetching dogs
+ * @param {string|null} options.breed - The breed to filter by
+ * @param {number} options.page - The page number to fetch
+ * @param {'asc'|'desc'} options.sort - The sort direction
+ * @param {'age'|'breed'|'name'} options.sortBy - The field to sort by
+ * @returns {Promise<{dogs: any[], totalPages: number}>} The fetched dogs and total pages
+ * @throws {Error} If the API request fails
+ */
 const getDogs = async ({ breed, page, sort, sortBy }: FetchDogIDsOptions) => {
   const { data: dogIdsData, error: dogIdsError } = await fetchDogIds({
     breed,
@@ -66,6 +80,11 @@ const getDogs = async ({ breed, page, sort, sortBy }: FetchDogIDsOptions) => {
   return { dogs: dogsData, totalPages: dogIdsData.totalPages };
 };
 
+/**
+ * Fetches all available dog breeds
+ * @returns {Promise<string[]>} Array of dog breeds
+ * @throws {Error} If the API request fails
+ */
 const getBreeds = async () => {
   const { data, error } = await fetchDogBreeds();
 
@@ -78,6 +97,15 @@ const getBreeds = async () => {
   return data;
 };
 
+/**
+ * Creates query options for fetching dogs
+ * @param {Object} options - The options for the query
+ * @param {number} options.page - The page number
+ * @param {string|null} options.breed - The breed to filter by
+ * @param {'asc'|'desc'} options.sort - The sort direction
+ * @param {'age'|'breed'|'name'} options.sortBy - The field to sort by
+ * @returns {QueryOptions} Query options for React Query
+ */
 const dogOptions = ({ page, breed, sort, sortBy }: FetchDogIDsOptions) => {
   return queryOptions({
     queryKey: ['dogs', page, breed, sort, sortBy],
@@ -93,6 +121,16 @@ export const SearchContext = createContext<{
   dispatch: () => {},
 });
 
+/**
+ * Provider component for the Search context. The component reacts to changes to the url query parameters and re-fetches the dog data
+ * @param {Object} props - Component props
+ * @param {React.ReactNode} props.children - Child components
+ * @param {number} [props.page=1] - Current page number
+ * @param {string} [props.breed='All+breeds'] - Selected breed filter
+ * @param {'asc'|'desc'} [props.sort='asc'] - Sort direction
+ * @param {'age'|'breed'|'name'} [props.sortBy='breed'] - Field to sort by
+ * @returns {JSX.Element} Search context provider component
+ */
 export function SearchContextProvider({
   children,
   page = 1,

@@ -37,6 +37,11 @@ const formSchema = z.object({
 
 type FormSchema = z.infer<typeof formSchema>;
 
+/**
+ * Performs user login by making a request to the login endpoint
+ * @param {FormSchema} values - Login form values
+ * @returns {Promise<Response>} Fetch response from the login request
+ */
 async function login(values: z.infer<typeof formSchema>) {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/auth/login`,
@@ -55,6 +60,12 @@ async function login(values: z.infer<typeof formSchema>) {
   }
 }
 
+/**
+ * Login form component that handles user login
+ * @param {Object} props - Component props
+ * @param {string} props.className - Class name for the component
+ * @returns {JSX.Element} Login form component
+ */
 export function LoginForm({
   className,
   ...props

@@ -4,6 +4,10 @@ import { Dog } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { AuthButton } from '@/components/AuthButton';
 
+/**
+ * Navigation component that renders the app's navigation bar
+ * @returns {JSX.Element} Navigation component
+ */
 export async function Navigation() {
   return (
     <nav className="flex w-full items-center justify-between border-b p-6 md:p-8">

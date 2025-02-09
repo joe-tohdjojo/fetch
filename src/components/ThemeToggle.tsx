@@ -6,6 +6,10 @@ import { useTheme } from 'next-themes';
 
 import { Button } from '@/components/ui/button';
 
+/**
+ * Theme toggle component that toggles between light and dark mode
+ * @returns {JSX.Element} Theme toggle component
+ */
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
 

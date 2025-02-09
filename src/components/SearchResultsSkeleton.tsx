@@ -2,6 +2,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Skeleton } from '@/components/ui/skeleton';
 
+/**
+ * Renders a list of empty dog cards
+ * @returns {JSX.Element[]} Array of dog card components
+ */
 export function SearchResultsSkeleton() {
   return Array(24)
     .fill(undefined)

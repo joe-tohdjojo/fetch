@@ -7,6 +7,10 @@ import { SearchResultsSkeleton } from '@/components/SearchResultsSkeleton';
 import { SearchFilters } from '@/components/SearchFilters/SearchFilters';
 import { SearchContext } from '@/context/SearchContext';
 
+/**
+ * Component for rendering the search page
+ * @returns {JSX.Element} Search page component
+ */
 export function Search() {
   const { state } = useContext(SearchContext);
 

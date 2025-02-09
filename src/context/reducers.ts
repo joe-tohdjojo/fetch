@@ -7,6 +7,12 @@ export const CLEAR_FAVORITES = 'CLEAR_FAVORITES';
 
 export const LOCAL_STORAGE_KEY = 'dogFavorites';
 
+/**
+ * Reducer function for managing dog-related state
+ * @param {StateType} state - Current state
+ * @param {ActionType} action - Action to be performed
+ * @returns {StateType} New state after applying the action
+ */
 export const dogReducer = (state: StateType, action: ActionType): StateType => {
   switch (action.type) {
     case SET_DOGS:

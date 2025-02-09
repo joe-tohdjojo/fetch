@@ -7,6 +7,10 @@ import { useMutation } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 
+/**
+ * Performs user logout by making a request to the logout endpoint
+ * @returns {Promise<Response>} Fetch response from the logout request
+ */
 async function logout() {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/auth/logout`,
@@ -24,6 +28,12 @@ async function logout() {
     throw new Error('Failed to logout');
   }
 }
+
+/**
+ * Button component that handles authentication state and actions
+ * Shows login/logout based on current path and handles logout functionality
+ * @returns {JSX.Element} Authentication button component
+ */
 export function AuthButton() {
   const pathname = usePathname();
   const router = useRouter();

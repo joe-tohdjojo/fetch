@@ -18,6 +18,13 @@ import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Skeleton } from './ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 
+/**
+ * Fetches a dog match based on favorited dog IDs
+ * @param {Object} options - Options object
+ * @param {string[]} options.dogIds - Array of dog IDs to find a match from
+ * @returns {Promise<Dog>} Matched dog object
+ * @throws {Error} If the match request fails
+ */
 const getDogMatch = async ({ dogIds }: { dogIds: string[] }) => {
   const { data: dogMatchData, error: dogMatchError } = await fetchDogMatch({
     dogIds,
@@ -37,6 +44,11 @@ const getDogMatch = async ({ dogIds }: { dogIds: string[] }) => {
   return dogsData[0];
 };
 
+/**
+ * Modal component that displays a matched dog from favorites
+ * Allows users to generate matches from their favorited dogs
+ * @returns {JSX.Element} Match modal component
+ */
 export function MatchModal() {
   const [dog, setDog] = useState<Dog | null>(null);
   const { state } = useContext(SearchContext);
