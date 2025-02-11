@@ -24,7 +24,7 @@ export function Search() {
   });
 
   useEffect(() => {
-    if (error) {
+    if (error && error.message === '401 Unauthorized') {
       router.push('/login');
     }
   }, [error, router]);
