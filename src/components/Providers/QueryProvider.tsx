@@ -17,6 +17,14 @@ export const QueryProvider = ({ children }: { children: React.ReactNode }) => {
         defaultOptions: {
           queries: {
             staleTime: 30 * 1000, // I would work with product to determine a practical staleTime
+            retry: (failureCount, error) => {
+              // If user is unauthorized, no need to retry. Allow app to redirect to /login
+              if (error.message === '401 Unauthorized') return false;
+
+              // Retry 3 times on failed queries
+              if (failureCount < 3) return true;
+              return false;
+            },
           },
         },
       }),
