@@ -46,10 +46,18 @@ const getDogs = async ({ breed, page, sort, sortBy }: FetchDogIDsOptions) => {
   return { dogs: dogsData, totalPages: dogIdsData.totalPages };
 };
 
-const dogOptions = (filterOptions: FetchDogIDsOptions) => {
+const dogOptions = (filteroptions: FetchDogIDsOptions) => {
   return queryOptions({
-    queryKey: ['dogs', filterOptions],
-    queryFn: () => getDogs(filterOptions),
+    queryKey: ['dogs', filteroptions],
+    queryFn: () => getDogs(filteroptions),
+    retry: (failureCount, error) => {
+      // If user is unauthorized, no need to retry. Allow app to redirect to /login
+      if (error.message === '401 Unauthorized') return false;
+
+      // Retry 3 times on failed queries
+      if (failureCount <= 3) return true;
+      return false;
+    },
   });
 };
 
