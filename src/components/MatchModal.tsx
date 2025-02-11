@@ -12,7 +12,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { SearchContext } from '@/context/SearchContext';
+import { GlobalStateContext } from '@/context/GlobalStateContext';
 import { fetchDogMatch, fetchDogs } from '@/lib/fetchDogStuff';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Skeleton } from './ui/skeleton';
@@ -51,7 +51,7 @@ const getDogMatch = async ({ dogIds }: { dogIds: string[] }) => {
  */
 export function MatchModal() {
   const [dog, setDog] = useState<Dog | null>(null);
-  const { state } = useContext(SearchContext);
+  const { state } = useContext(GlobalStateContext);
   const { toast } = useToast();
   const mutation = useMutation({
     mutationFn: async () =>

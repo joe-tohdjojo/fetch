@@ -8,7 +8,7 @@ import { Card } from '@/components/ui/card';
 import { CLEAR_FAVORITES } from '@/context/reducers';
 import { MatchModal } from '@/components/MatchModal';
 import { Pagination } from '@/components/Pagination';
-import { SearchContext } from '@/context/SearchContext';
+import { GlobalStateContext } from '@/context/GlobalStateContext';
 import { Sorter } from '@/components/SearchFilters/Sorter';
 
 /**
@@ -16,7 +16,7 @@ import { Sorter } from '@/components/SearchFilters/Sorter';
  * @returns {JSX.Element} Search filters component
  */
 export function SearchFilters() {
-  const { state, dispatch } = useContext(SearchContext);
+  const { state, dispatch } = useContext(GlobalStateContext);
   const favoritesCount = Object.entries(state.favorites).length;
 
   return (

@@ -1,6 +1,6 @@
 'use client';
 
-import { useContext } from 'react';
+import { useRouter } from 'next/navigation';
 import { ArrowDownUp, ArrowUpDown } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -10,8 +10,8 @@ import {
   SelectItem,
   SelectTrigger,
 } from '@/components/ui/select';
-import { SearchContext } from '@/context/SearchContext';
-import { useRouter } from 'next/navigation';
+import { useFilters } from '@/hooks/useFilters';
+import { useState } from 'react';
 
 /**
  * Component for sorting dog results by different criteria
@@ -20,20 +20,21 @@ import { useRouter } from 'next/navigation';
  * @returns {JSX.Element} Sorter component
  */
 export function Sorter({ className = '' }: { className?: string }) {
+  const { breed, sortBy, sort } = useFilters();
+  const [sorter, setSorter] = useState<'age' | 'breed' | 'name'>(sortBy);
   const router = useRouter();
-  const { state } = useContext(SearchContext);
+
   return (
     <div className="flex flex-col gap-2 sm:flex-row">
       <Select
-        onValueChange={(value) =>
-          router.push(
-            `/search?page=1&breed=${state.filters.breed}&sortBy=${value}&sort=asc`,
-          )
-        }
+        value={sorter}
+        onValueChange={(value) => {
+          setSorter(value as 'age' | 'breed' | 'name');
+          router.push(`/search?page=1&breed=${breed}&sortBy=${value}&sort=asc`);
+        }}
       >
         <SelectTrigger className={className}>
-          {`${state.filters.sortBy[0].toUpperCase()}${state.filters.sortBy.slice(1)}` ||
-            'Sort by'}
+          {`${sortBy[0].toUpperCase()}${sortBy.slice(1)}` || 'Sort by'}
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="age">Age</SelectItem>
@@ -44,12 +45,12 @@ export function Sorter({ className = '' }: { className?: string }) {
       <Button
         onClick={() =>
           router.push(
-            `/search?page=1&breed=${state.filters.breed}&sortBy=${state.filters.sortBy}&sort=${state.filters.sort === 'asc' ? 'desc' : 'asc'}`,
+            `/search?page=1&breed=${breed}&sortBy=${sortBy}&sort=${sort === 'asc' ? 'desc' : 'asc'}`,
           )
         }
         variant="secondary"
       >
-        {state.filters.sort === 'asc' ? <ArrowUpDown /> : <ArrowDownUp />}
+        {sort === 'asc' ? <ArrowUpDown /> : <ArrowDownUp />}
       </Button>
     </div>
   );

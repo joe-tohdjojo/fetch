@@ -1,6 +1,6 @@
 'use client';
 
-import { useContext } from 'react';
+import { useEffect, useState } from 'react';
 
 import {
   Pagination as P,
@@ -10,7 +10,8 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
-import { SearchContext } from '@/context/SearchContext';
+import { useFilters } from '@/hooks/useFilters';
+import { useDogs } from '@/hooks/useDogs';
 
 /**
  * Component for rendering pagination
@@ -19,12 +20,17 @@ import { SearchContext } from '@/context/SearchContext';
  * @returns {JSX.Element} Pagination component
  */
 export function Pagination({ href }: { href: string }) {
-  const {
-    state: {
-      filters: { breed, sort, sortBy },
-      query: { currentPage, totalPages: total },
-    },
-  } = useContext(SearchContext);
+  const [totalPages, setTotalPages] = useState(500);
+  const { breed, page: currentPage, sort, sortBy } = useFilters();
+  const { data } = useDogs({
+    page: currentPage,
+    breed,
+    sort,
+    sortBy,
+  });
+  useEffect(() => {
+    if (data?.totalPages !== totalPages) setTotalPages(totalPages);
+  }, [data?.totalPages, totalPages, setTotalPages]);
 
   return (
     <P className="mx-0 justify-end">
@@ -49,14 +55,18 @@ export function Pagination({ href }: { href: string }) {
             {currentPage}
           </PaginationLink>
         </PaginationItem>
-        <PaginationItem className={currentPage < total ? 'flex' : 'invisible'}>
+        <PaginationItem
+          className={currentPage < totalPages ? 'flex' : 'invisible'}
+        >
           <PaginationLink
             href={`${href}?page=${currentPage + 1}${breed ? `&breed=${breed}` : ''}&sort=${sort}&sortBy=${sortBy}`}
           >
             {currentPage + 1}
           </PaginationLink>
         </PaginationItem>
-        <PaginationItem className={currentPage < total ? 'flex' : 'invisible'}>
+        <PaginationItem
+          className={currentPage < totalPages ? 'flex' : 'invisible'}
+        >
           <PaginationNext
             href={`${href}?page=${currentPage + 1}${breed ? `&breed=${breed}` : ''}&sort=${sort}&sortBy=${sortBy}`}
           />

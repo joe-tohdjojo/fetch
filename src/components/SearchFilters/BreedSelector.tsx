@@ -1,6 +1,5 @@
 'use client';
 
-import { useContext } from 'react';
 import { useRouter } from 'next/navigation';
 
 import {
@@ -10,7 +9,8 @@ import {
   SelectTrigger,
   SelectGroup,
 } from '@/components/ui/select';
-import { SearchContext } from '@/context/SearchContext';
+import { useBreeds } from '@/hooks/useBreeds';
+import { useFilters } from '@/hooks/useFilters';
 
 /**
  * Component for selecting dog breeds with a dropdown
@@ -19,24 +19,25 @@ import { SearchContext } from '@/context/SearchContext';
  * @returns {JSX.Element} Breed selector component
  */
 export function BreedSelector({ className = '' }: { className?: string }) {
-  const { state } = useContext(SearchContext);
+  const { breed, sort, sortBy } = useFilters();
   const router = useRouter();
+  const { data } = useBreeds();
 
-  return state.breeds?.length === 0 ? null : (
+  return data?.length === 0 ? null : (
     <Select
       onValueChange={(value) =>
         router.push(
-          `/search?page=1&breed=${value}&sort=${state.filters.sort}&sortBy=${state.filters.sortBy}`,
+          `/search?page=1&breed=${value}&sort=${sort}&sortBy=${sortBy}`,
         )
       }
-      value={state.filters.breed || 'All breeds'}
+      value={breed}
     >
-      <SelectTrigger className={className}>{state.filters.breed}</SelectTrigger>
+      <SelectTrigger className={className}>{breed}</SelectTrigger>
       <SelectContent>
         <SelectGroup className="border-b">
           <SelectItem value="All breeds">All breeds</SelectItem>
         </SelectGroup>
-        {state.breeds?.map((breed: string) => (
+        {data?.map((breed: string) => (
           <SelectItem
             key={breed}
             value={breed}

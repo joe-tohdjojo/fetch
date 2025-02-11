@@ -1,5 +1,5 @@
 export type FetchDogIDsOptions = {
-  breed: string | null;
+  breed: string;
   page: number;
   sort: 'asc' | 'desc';
   sortBy: 'age' | 'breed' | 'name';
@@ -31,7 +31,7 @@ export const fetchDogIds = (() => {
       sort: s,
       size,
       from,
-      breeds: breed,
+      breeds: breed === 'All breeds' ? null : breed,
     } as const;
     const searchStr = Object.entries(queryParams).reduce(
       (acc, [key, value]) => {

@@ -1,5 +1,5 @@
 import { Search } from '@/components/Search';
-import { SearchContextProvider } from '@/context/SearchContext';
+import { GlobalStateContextProvider } from '@/context/GlobalStateContext';
 import { z } from 'zod';
 
 const searchParamsSchema = z.object({
@@ -24,14 +24,14 @@ export default async function SearchPage({
 
   return (
     <main className="mb-36 mt-8 flex h-full flex-col items-center gap-8 px-4">
-      <SearchContextProvider
+      <GlobalStateContextProvider
         page={validatedParams.page}
         breed={validatedParams.breed}
         sort={validatedParams.sort}
         sortBy={validatedParams.sortBy}
       >
         <Search />
-      </SearchContextProvider>
+      </GlobalStateContextProvider>
     </main>
   );
 }

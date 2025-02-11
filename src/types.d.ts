@@ -8,21 +8,7 @@ type Dog = {
 };
 
 type StateType = {
-  dogs: Dog[];
-  breeds: string[];
   favorites: { [id: string]: boolean };
-  filters: {
-    breed: string | null;
-    sort: 'asc' | 'desc';
-    sortBy: 'age' | 'breed' | 'name';
-  };
-  query: {
-    currentPage: number;
-    isLoading: boolean;
-    isError: boolean;
-    totalPages: number;
-    error?: { message: string };
-  };
 };
 
 type ActionType = {
