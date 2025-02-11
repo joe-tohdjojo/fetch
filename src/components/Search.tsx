@@ -18,7 +18,6 @@ export function Search() {
     sort,
     sortBy,
   });
-  console.log(`@JT ~ Search ~ data:`, data);
 
   return (
     <div className="relative mb-10 flex flex-col items-center gap-4">
