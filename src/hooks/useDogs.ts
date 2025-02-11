@@ -46,12 +46,11 @@ const getDogs = async ({ breed, page, sort, sortBy }: FetchDogIDsOptions) => {
   return { dogs: dogsData, totalPages: dogIdsData.totalPages };
 };
 
-const dogOptions = (filteroptions: FetchDogIDsOptions) => {
-  return queryOptions({
+const dogOptions = (filteroptions: FetchDogIDsOptions) =>
+  queryOptions({
     queryKey: ['dogs', filteroptions],
     queryFn: () => getDogs(filteroptions),
   });
-};
 
 export const useDogs = (params: FetchDogIDsOptions) => {
   const {
