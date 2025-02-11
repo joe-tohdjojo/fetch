@@ -1,4 +1,8 @@
-import { queryOptions, useQuery } from '@tanstack/react-query';
+import {
+  queryOptions,
+  useQuery,
+  keepPreviousData,
+} from '@tanstack/react-query';
 
 import {
   fetchDogIds,
@@ -50,6 +54,7 @@ const dogOptions = (filteroptions: FetchDogIDsOptions) =>
   queryOptions({
     queryKey: ['dogs', filteroptions],
     queryFn: () => getDogs(filteroptions),
+    placeholderData: keepPreviousData,
   });
 
 export const useDogs = (params: FetchDogIDsOptions) => {
