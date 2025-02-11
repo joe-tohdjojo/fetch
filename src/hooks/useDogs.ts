@@ -46,10 +46,10 @@ const getDogs = async ({ breed, page, sort, sortBy }: FetchDogIDsOptions) => {
   return { dogs: dogsData, totalPages: dogIdsData.totalPages };
 };
 
-const dogOptions = ({ page, breed, sort, sortBy }: FetchDogIDsOptions) => {
+const dogOptions = (filterOptions: FetchDogIDsOptions) => {
   return queryOptions({
-    queryKey: ['dogs', page, breed, sort, sortBy],
-    queryFn: () => getDogs({ page, breed, sort, sortBy }),
+    queryKey: ['dogs', filterOptions],
+    queryFn: () => getDogs(filterOptions),
   });
 };
 
