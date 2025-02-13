@@ -51,11 +51,12 @@ export function SearchResults({ data }: { data: Dog[] }) {
             className="bg-muted"
           >
             <Image
-              className="h-full w-full rounded object-cover"
-              src={dog.img}
               alt={dog.name}
+              className="h-full w-full rounded object-cover"
               fill
               sizes="200px"
+              src={dog.img}
+              unoptimized
             />
           </AspectRatio>
           <p>
