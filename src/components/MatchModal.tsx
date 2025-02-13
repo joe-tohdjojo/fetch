@@ -59,11 +59,12 @@ export function MatchModal() {
             <AspectRatio ratio={1 / 1}>
               {dog ? (
                 <Image
-                  className="rounded-lg object-cover"
-                  src={dog.img}
                   alt={dog.name}
+                  className="rounded-lg object-cover"
                   fill
                   sizes="250px"
+                  src={dog.img}
+                  unoptimized
                 />
               ) : (
                 <Skeleton className="h-full w-full rounded" />
