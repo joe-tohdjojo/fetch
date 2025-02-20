@@ -20,7 +20,7 @@ import { useDogs } from '@/hooks/useDogs';
  * @returns {JSX.Element} Pagination component
  */
 export function Pagination({ href }: { href: string }) {
-  const [totalPages, setTotalPages] = useState(500);
+  const [totalPages, setTotalPages] = useState(0);
   const { breed, page: currentPage, sort, sortBy } = useFilters();
   const { data } = useDogs({
     page: currentPage,
@@ -29,7 +29,8 @@ export function Pagination({ href }: { href: string }) {
     sortBy,
   });
   useEffect(() => {
-    if (data?.totalPages !== totalPages) setTotalPages(totalPages);
+    if (data?.totalPages !== totalPages && typeof data?.totalPages === 'number')
+      setTotalPages(data?.totalPages);
   }, [data?.totalPages, totalPages, setTotalPages]);
 
   return (
